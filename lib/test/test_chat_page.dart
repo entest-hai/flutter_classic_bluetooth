@@ -8,7 +8,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
 
-  const ChatPage({this.server});
+  ChatPage({this.server});
 
   @override
   _ChatPage createState() => new _ChatPage();
@@ -34,7 +34,8 @@ class _ChatPage extends State<ChatPage> {
   final ScrollController listScrollController = new ScrollController();
 
   bool isConnecting = true;
-  bool get isConnected => connection != null && connection.isConnected;
+  // bool get isConnected => connection != null && connection.isConnected;
+  bool get isConnected => connection == null;
 
   bool isDisconnecting = false;
 
@@ -42,34 +43,40 @@ class _ChatPage extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    BluetoothConnection.toAddress(widget.server.address).then((_connection) {
-      print('Connected to the device');
-      connection = _connection;
-      setState(() {
-        isConnecting = false;
-        isDisconnecting = false;
-      });
+    if (widget.server != null) {
+      BluetoothConnection.toAddress(widget.server.address).then((_connection) {
+        print('Connected to the device');
+        connection = _connection;
+        setState(() {
+          isConnecting = false;
+          isDisconnecting = false;
+        });
 
-      connection.input.listen(_onDataReceived).onDone(() {
-        // Example: Detect which side closed the connection
-        // There should be `isDisconnecting` flag to show are we are (locally)
-        // in middle of disconnecting process, should be set before calling
-        // `dispose`, `finish` or `close`, which all causes to disconnect.
-        // If we except the disconnection, `onDone` should be fired as result.
-        // If we didn't except this (no flag set), it means closing by remote.
-        if (isDisconnecting) {
-          print('Disconnecting locally!');
-        } else {
-          print('Disconnected remotely!');
-        }
-        if (this.mounted) {
-          setState(() {});
-        }
+        connection.input.listen(_onDataReceived).onDone(() {
+          // Example: Detect which side closed the connection
+          // There should be `isDisconnecting` flag to show are we are (locally)
+          // in middle of disconnecting process, should be set before calling
+          // `dispose`, `finish` or `close`, which all causes to disconnect.
+          // If we except the disconnection, `onDone` should be fired as result.
+          // If we didn't except this (no flag set), it means closing by remote.
+          if (isDisconnecting) {
+            print('Disconnecting locally!');
+          } else {
+            print('Disconnected remotely!');
+          }
+          if (this.mounted) {
+            setState(() {});
+          }
+        });
+      }).catchError((error) {
+        print('Cannot connect, exception occured');
+        print(error);
+        setState(() {
+          isConnecting = false;
+          isDisconnecting = false;
+        });
       });
-    }).catchError((error) {
-      print('Cannot connect, exception occured');
-      print(error);
-    });
+    }
   }
 
   @override
@@ -219,8 +226,8 @@ class _ChatPage extends State<ChatPage> {
 
     if (text.length > 0) {
       try {
-        connection.output.add(utf8.encode(text + "\r\n"));
-        await connection.output.allSent;
+        // connection.output.add(utf8.encode(text + "\r\n"));
+        // await connection.output.allSent;
 
         setState(() {
           messages.add(_Message(clientID, text));
