@@ -95,6 +95,8 @@ class _MainPage extends State<MainPage> {
           children: <Widget>[
             Divider(),
             ListTile(title: const Text('General')),
+
+            // done
             SwitchListTile(
               title: const Text('Enable Bluetooth'),
               value: _bluetoothState.isEnabled,
@@ -113,6 +115,8 @@ class _MainPage extends State<MainPage> {
                 });
               },
             ),
+
+            // done with many things run under the hood to scan device and pair
             ListTile(
               title: const Text('Bluetooth status'),
               subtitle: Text(_bluetoothState.toString()),
@@ -123,15 +127,21 @@ class _MainPage extends State<MainPage> {
                 },
               ),
             ),
+
+            // done
             ListTile(
               title: const Text('Local adapter address'),
               subtitle: Text(_address),
             ),
+
+            // done
             ListTile(
               title: const Text('Local adapter name'),
               subtitle: Text(_name),
               onLongPress: null,
             ),
+
+            // done
             ListTile(
               title: _discoverableTimeoutSecondsLeft == 0
                   ? const Text("Discoverable")
@@ -190,6 +200,8 @@ class _MainPage extends State<MainPage> {
               ),
             ),
             Divider(),
+
+            // done
             ListTile(title: const Text('Devices discovery and connection')),
             SwitchListTile(
               title: const Text('Auto-try specific pin when pairing'),
@@ -214,6 +226,8 @@ class _MainPage extends State<MainPage> {
                 }
               },
             ),
+
+            // done show device and RSSI and MAC
             ListTile(
               title: RaisedButton(
                   child: const Text('Explore discovered devices'),
@@ -234,6 +248,8 @@ class _MainPage extends State<MainPage> {
                     }
                   }),
             ),
+
+            // done
             ListTile(
               title: RaisedButton(
                 child: const Text('Connect to paired device to chat'),
@@ -247,6 +263,7 @@ class _MainPage extends State<MainPage> {
                     ),
                   );
 
+                  // done with magical things selectedDevice ==> chatPage
                   if (selectedDevice != null) {
                     print('Connect -> selected ' + selectedDevice.address);
                     _startChat(context, selectedDevice);
@@ -256,6 +273,7 @@ class _MainPage extends State<MainPage> {
                 },
               ),
             ),
+
             Divider(),
             ListTile(title: const Text('Multiple connections example')),
             ListTile(

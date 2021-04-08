@@ -42,6 +42,7 @@ class _ChatPage extends State<ChatPage> {
   void initState() {
     super.initState();
 
+    // done
     BluetoothConnection.toAddress(widget.server.address).then((_connection) {
       print('Connected to the device');
       connection = _connection;
@@ -74,7 +75,7 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   void dispose() {
-    // Avoid memory leak (`setState` after dispose) and disconnect
+    // NICE: avoid memory leak (`setState` after dispose) and disconnect
     if (isConnected) {
       isDisconnecting = true;
       connection.dispose();
@@ -111,6 +112,7 @@ class _ChatPage extends State<ChatPage> {
       );
     }).toList();
 
+    // done
     return Scaffold(
       appBar: AppBar(
           title: (isConnecting
@@ -163,6 +165,7 @@ class _ChatPage extends State<ChatPage> {
     );
   }
 
+  //
   void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
