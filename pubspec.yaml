@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bluetooth_serial: ^0.2.2
   scoped_model: ^1.1.0
+  flutter_bloc: ^7.0.0
 
 
 dev_dependencies:

@@ -17,6 +17,7 @@ class BondedDeviceView extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: ElevatedButton(child: Text("Discovered Devices"), onPressed: () async {
+
             final String device = await Navigator.of(context).push(MaterialPageRoute(builder: (context){return ListDevice();}));
 
             if (device != null) {
@@ -47,12 +48,17 @@ class ListDevice extends StatelessWidget {
     );
   }
 
-  ListTile buildDevice(BuildContext context, String device){
-    return ListTile(
-      title: Text(device),
-      onTap: (){
-        Navigator.of(context).pop(device);
-      },
+  Card buildDevice(BuildContext context, String device){
+    return Card(
+      child: ListTile(
+        trailing: ElevatedButton(child: Text("Connect"), onPressed: (){
+          Navigator.of(context).pop(device);
+        },),
+        title: Text(device),
+        onTap: (){
+          // Navigator.of(context).pop(device);
+        }
+      ),
     );
   }
 }
