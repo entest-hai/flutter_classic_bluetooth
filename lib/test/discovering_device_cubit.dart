@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bonded_device_state.dart';
 
 class DiscoverDevicesState {
+  final bool isDiscovering;
   List<DeviceWithAvailability> devices;
-  DiscoverDevicesState({this.devices});
+  DiscoverDevicesState({
+    this.isDiscovering=true,
+    this.devices});
 }
 
 class DiscoverDevicesCubit extends Cubit<DiscoverDevicesState> {
@@ -26,7 +29,7 @@ class DiscoverDevicesCubit extends Cubit<DiscoverDevicesState> {
 
     _discoveryStreamSubscription.onDone(() {
       print(devices.toString());
-      emit(DiscoverDevicesState(devices: devices));
+      emit(DiscoverDevicesState(devices: devices, isDiscovering: false));
       _discoveryStreamSubscription.cancel();
     });
   }

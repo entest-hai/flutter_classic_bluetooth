@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_ble_serial/test/discovering_deviews_view.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // bluetooth cubit
 import 'bluetooth_cubit.dart';
 // bonded devices cubit
 import 'bonded_devices_cubit.dart';
+import 'bonded_devices_view.dart';
 // boded device state
 import 'bonded_device_state.dart';
 import 'discovering_device_cubit.dart';
+import 'discovering_device_view.dart';
+// chat cubit
+import 'chat_message_cubit.dart';
 // device entity
 import './../BluetoothDeviceListEntry.dart';
+// chat view
+import 'chat_view.dart';
 
 class BluetoothStateApp extends StatelessWidget {
   @override
@@ -19,6 +27,7 @@ class BluetoothStateApp extends StatelessWidget {
         BlocProvider(create: (context) => BluetoothCubit()..checkBluetoothState()),
         BlocProvider(create: (context) => BondedDevicesCubit()),
         BlocProvider(create: (context) => DiscoverDevicesCubit()),
+        BlocProvider(create: (context) => ChatCubit()),
       ],
       child: SerialBluetoothNav(),
       ),
@@ -32,6 +41,9 @@ class SerialBluetoothNav extends StatelessWidget {
     return Navigator(
       pages: [MaterialPage(child: BluetoothStateView())],
       onPopPage: (route, result){
+
+        // check current view if chat view release connection
+
         return route.didPop(result);
       },
     );
@@ -152,7 +164,7 @@ class _BluetoothState extends State<BluetoothStateView> {
               onPressed: () async {
                 // Push to list devices view and return selectedDevice
                 BlocProvider.of<DiscoverDevicesCubit>(context).startDiscovery();
-                Navigator.of(context).push(MaterialPageRoute(builder: (context){return DiscoveringDeviewView();}));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){return DiscoveringDevicesView();}));
                 // Check selectedDevice and go to selectedDeviceView
               },
             ),
@@ -164,9 +176,16 @@ class _BluetoothState extends State<BluetoothStateView> {
 
               BlocProvider.of<BondedDevicesCubit>(context).getBondedDevices();
               // Push to list of device and selected device
-              Navigator.of(context).push(MaterialPageRoute(builder: (context){return BondedDevicesView();}));
+              final selectedDevice = await Navigator.of(context).push(MaterialPageRoute(builder: (context){return BondedDevicesView();}));
 
               // Show selected device view
+              if (selectedDevice !=null) {
+                print(ModalRoute.of(context).settings.name);
+                BlocProvider.of<ChatCubit>(context).establishConnection(selectedDevice.device);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){return BluetoothChatView(bluetoothDevice: selectedDevice.device,);}));
+
+              }
+
             },),
           ),
 
@@ -201,69 +220,3 @@ class _BluetoothState extends State<BluetoothStateView> {
     );
   }
 }
-
-
-// discovering devices view
-class DiscoveringDeviewView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Discovering Devices"),),
-      body: SafeArea(
-        child: BlocBuilder<DiscoverDevicesCubit, DiscoverDevicesState>(builder: (context,state){
-          return ListView(
-            children: buildListDevices(context, state.devices),
-          );
-        },),
-      ),
-    );
-  }
-
-  List<Card> buildListDevices(BuildContext context, List<DeviceWithAvailability> devices){
-    return devices.map((device) =>  Card(
-      child: BluetoothDeviceListEntry(
-        device: device.device,
-        rssi: device.rssi,
-        enabled: device.availability == DeviceAvailability.yes,
-        onTap: (){
-          Navigator.of(context).pop(device);
-        },
-      ),
-    )).toList();
-  }
-}
-
-
-
-// SelectedBondedDeviceView
-class BondedDevicesView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Bonded Devices"),),
-      body: SafeArea(
-        child: BlocBuilder<BondedDevicesCubit, List<DeviceWithAvailability>>(builder: (context,devices){
-          return ListView(
-            children: buildListDevices(context, devices),
-          );
-        },),
-      ),
-    );
-  }
-
-  List<Card> buildListDevices(BuildContext context, List<DeviceWithAvailability> devices){
-    return devices.map((device) =>  Card(
-      child: BluetoothDeviceListEntry(
-        device: device.device,
-        rssi: device.rssi,
-        enabled: device.availability == DeviceAvailability.yes,
-        onTap: (){
-          Navigator.of(context).pop(device);
-        },
-      ),
-    )).toList();
-  }
-
-
-}
-

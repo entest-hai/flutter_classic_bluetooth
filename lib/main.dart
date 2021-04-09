@@ -6,7 +6,7 @@ import 'test/test_chat_page.dart';
 // test bonded device page
 import 'test/test_bonded_devices.dart';
 // test bluetooth state
-import 'test/test_bluetooth_state.dart';
+import 'test/test_serial_bluetooth_app.dart';
 
 void main() {
   runApp(MyApp());
