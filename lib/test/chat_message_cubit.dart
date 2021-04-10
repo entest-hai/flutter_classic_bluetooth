@@ -87,7 +87,7 @@ class ChatCubit extends Cubit<ChatState> {
     int index = buffer.indexOf(13);
     if (~index != 0){
       final message = Message(
-        id: this.state.messages.length + 1,
+        id: this.state.messages.length % 2 == 0 ? this.state.messages.length + 1 : this.state.messages.length + 2,
         message: backspacesCounter > 0
             ? _messageBuffer.substring(0, _messageBuffer.length - backspacesCounter)
             : _messageBuffer + dataString.substring(0, index),);
@@ -111,7 +111,7 @@ class ChatCubit extends Cubit<ChatState> {
 
     String cleanMessage = message.trim();
 
-    _messages.add(Message(message: cleanMessage, id: this.state.messages.length + 1));
+    _messages.add(Message(message: cleanMessage, id: this.state.messages.length % 2 == 0 ? this.state.messages.length + 2 : this.state.messages.length + 1));
 
     try {
       connection.output.add(utf8.encode(cleanMessage + "\r\n"));
