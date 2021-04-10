@@ -90,7 +90,7 @@ class _BluetoothChatState extends State<BluetoothChatView> {
       children: [
         Container(
           child: Text(
-            "message.message",
+            message.message,
             style: TextStyle(color: Colors.white),
           ),
           padding: EdgeInsets.all(12),
