@@ -67,7 +67,7 @@ class _BluetoothState extends State<BluetoothStateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Bluetooth State"),),
+      appBar: AppBar(title: Text("Serial Bluetooth"),),
       body: SafeArea(
         child: Container(
           child: ListView(

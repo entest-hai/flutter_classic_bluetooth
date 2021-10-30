@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
-// done
+// Done 
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
 
@@ -14,7 +14,8 @@ class ChatPage extends StatefulWidget {
   _ChatPage createState() => new _ChatPage();
 }
 
-// done
+
+// Done 
 class _Message {
   int whom;
   String text;
@@ -22,6 +23,7 @@ class _Message {
   _Message(this.whom, this.text);
 }
 
+// 
 class _ChatPage extends State<ChatPage> {
   static final clientID = 0;
   BluetoothConnection connection;
@@ -42,7 +44,6 @@ class _ChatPage extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    // done
     BluetoothConnection.toAddress(widget.server.address).then((_connection) {
       print('Connected to the device');
       connection = _connection;
@@ -75,7 +76,7 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   void dispose() {
-    // NICE: avoid memory leak (`setState` after dispose) and disconnect
+    // Avoid memory leak (`setState` after dispose) and disconnect
     if (isConnected) {
       isDisconnecting = true;
       connection.dispose();
@@ -87,7 +88,6 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    //done
     final List<Row> list = messages.map((_message) {
       return Row(
         children: <Widget>[
@@ -112,13 +112,12 @@ class _ChatPage extends State<ChatPage> {
       );
     }).toList();
 
-    // done
     return Scaffold(
       appBar: AppBar(
           title: (isConnecting
               ? Text('Connecting chat to ' + widget.server.name + '...')
               : isConnected
-                  ? Text('Live chat with ' + widget.server.name)
+                  ? Text('Send Data To ' + widget.server.name)
                   : Text('Chat log with ' + widget.server.name))),
       body: SafeArea(
         child: Column(
@@ -165,7 +164,6 @@ class _ChatPage extends State<ChatPage> {
     );
   }
 
-  //
   void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
@@ -215,7 +213,6 @@ class _ChatPage extends State<ChatPage> {
     }
   }
 
-  // done
   void _sendMessage(String text) async {
     text = text.trim();
     textEditingController.clear();
@@ -240,5 +237,11 @@ class _ChatPage extends State<ChatPage> {
         setState(() {});
       }
     }
+
+    Future.delayed(Duration(milliseconds: 1000)).then((value) => {_sendMessage(text)});
+
   }
+
+
+
 }

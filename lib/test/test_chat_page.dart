@@ -123,7 +123,7 @@ class _ChatPage extends State<ChatPage> {
           title: (isConnecting
               ? Text('Connecting chat to ' + widget.server.name + '...')
               : isConnected
-                  ? Text('Live chat with ' + widget.server.name)
+                  ? Text('Send Data To ' + widget.server.name)
                   : Text('Chat log with ' + widget.server.name))),
       body: SafeArea(
         child: Column(

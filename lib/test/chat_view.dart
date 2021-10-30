@@ -19,7 +19,7 @@ class _BluetoothChatState extends State<BluetoothChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Live chat with ${widget.bluetoothDevice.name}"),),
+      appBar: AppBar(title: Text("Send Data ${widget.bluetoothDevice.name}"),),
       body: SafeArea(
         child: Column(
           children: [

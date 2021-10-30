@@ -18,6 +18,8 @@ class ChatState {
 }
 
 class ChatCubit extends Cubit<ChatState> {
+
+  int count = 0; 
   String _messageBuffer = '';
   BluetoothConnection connection;
   List<Message> _messages = [];
@@ -111,7 +113,9 @@ class ChatCubit extends Cubit<ChatState> {
 
     String cleanMessage = message.trim();
 
-    _messages.add(Message(message: cleanMessage, id: this.state.messages.length % 2 == 0 ? this.state.messages.length + 2 : this.state.messages.length + 1));
+    _messages.add(Message(message: cleanMessage + " " + count.toString(), id: this.state.messages.length % 2 == 0 ? this.state.messages.length + 2 : this.state.messages.length + 1));
+
+    cleanMessage +=  " " + count.toString();
 
     try {
       connection.output.add(utf8.encode(cleanMessage + "\r\n"));
@@ -126,6 +130,12 @@ class ChatCubit extends Cubit<ChatState> {
         isConnected: true,
         isConnecting: false,
         messages: _messages));
+
+    count += 1;
+
+    Future.delayed(Duration(milliseconds: 1000)).then((value) => {addMessage(message)});
+
+
   }
 
 }
