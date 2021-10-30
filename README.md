@@ -12,4 +12,3 @@ Test comunication between Android and ESP32
 3. Pair a device to be bonded 
 4. Send and receive message with ESP32
 https://user-images.githubusercontent.com/20411077/139529655-d2e19ed5-d1e8-4a4d-9b58-fc7724b7c196.mp4
-![WhatsApp Image 2021-10-30 at 17 45 38](https://user-images.githubusercontent.com/20411077/139529786-9930d117-e90f-498c-8e23-bac59a2d99e3.jpeg)
